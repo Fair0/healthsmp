@@ -1,2 +1,2 @@
 # lifesteal-plugin
- A Life Steal Plugin for MC 1.17.1 on Spigot.
+ A Life Steal Plugin for MC 1.17.1 on Spigot. Uses Eclipse as the IDE. Needs Spigot 1.17.1 API https://www.spigotmc.org/wiki/buildtools/ and the Simple JSON library from google https://code.google.com/archive/p/json-simple/.
