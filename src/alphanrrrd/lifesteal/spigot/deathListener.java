@@ -1,7 +1,7 @@
 package alphanrrrd.lifesteal.spigot;
 
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.UUID;
 import java.io.FileReader;
@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.EventHandler;
@@ -23,7 +24,7 @@ import org.json.simple.parser.ParseException;
 public class deathListener implements Listener {
 	//Sets up the class attributes so that they can be accessed in any method.
 	ConsoleCommandSender console = Bukkit.getConsoleSender(); //This is the console because I didnt want to have to retype the console command whenever I wanted to print messages to the console.
-	Player killed; //This is the killed player used in the onPlayerDeath event handler to update the health JSON object.
+	LivingEntity killed; //This is the killed player used in the onPlayerDeath event handler to update the health JSON object.
 	Player killer; //This is the killer player used in the onPlayerDeath event handler to update the health JSON object.
 	Player tempPlayer; //Temp player used to set health on respawn
 	UUID killedUUID; //The UUID for the killed person used as the 'key' in the JSON object.
@@ -32,14 +33,18 @@ public class deathListener implements Listener {
 
 	@SuppressWarnings("unchecked") //org.json.simple doesnt know how to handle UUID's and Integers as they key value pair so it causes an unchecked warning. It works either way so I suppressed them to prevent compiler warnings.
 	@EventHandler
-	public void onPlayerDeath(PlayerDeathEvent event) {
+	public void onPlayerDeath(EntityDeathEvent event) {
 		/*This is the event handler for the death of a player.*/
-		try {
-			this.killed = event.getEntity();
+		this.killed = event.getEntity();
+		if(this.killed instanceof Player) {
 			this.killedUUID = this.killed.getUniqueId();
 			try{
 				this.killer = event.getEntity().getKiller();
-				this.killerUUID = event.getEntity().getKiller().getUniqueId();
+				try {
+					this.killerUUID = event.getEntity().getKiller().getUniqueId();
+				} catch(NullPointerException e) {
+					this.console.sendMessage("Killer UUID is null. Most likely caused by no killer.");
+				}
 			} catch(NullPointerException e) {
 				this.console.sendMessage("Killer is null most likely caused by server commands, the reset-plugin command, mobs, or natural causes.");
 			}
@@ -61,10 +66,10 @@ public class deathListener implements Listener {
 				//Updates the killers health since the killed will update on respawn.
 				updateKillerHealth(this.killer);
 			}
-		} finally {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		/*When the player respawns it does checks on their health and updates them based on the JSON file. If they have 0 health in the json
@@ -82,15 +87,15 @@ public class deathListener implements Listener {
 			}
 		} catch(NullPointerException e) {
 			/*This will catch the NullPointerException that the reset-plugin command causes and will set their base health to 20*/
+			this.playerDictJSON.put(this.tempPlayer.getUniqueId(), 20);
 			this.tempPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
 			this.console.sendMessage(tempPlayer.getDisplayName() + " has had their health reset to 20.");
 		}
 	}
 	
 	public void updateKillerHealth(Player killer) {
-		/*Updates the killers health from the JSON object.*/
-		Integer tempInt = (Integer) playerDictJSON.get(killer.getUniqueId());
-		killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(tempInt);
+		/*Updates the killers health from their current max health.*/
+		killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + 2);
 	}
 	
 	public void updateJSONFile() {
