@@ -41,21 +41,21 @@ public class deathListener implements Listener {
 				this.killer = event.getEntity().getKiller();
 				this.killerUUID = event.getEntity().getKiller().getUniqueId();
 			} catch(NullPointerException e) {
-				this.console.sendMessage("Killer is null most likely caused by server commands or the reset-plugin command.");
+				this.console.sendMessage("Killer is null most likely caused by server commands, the reset-plugin command, mobs, or natural causes.");
 			}
 			this.console.sendMessage("Killer is: " + this.killer);
 			/*These three if block updates the health of the players that are involved in the PlayerDeathEvent and if they are not in the JSON
 			 * object they are added to it.*/
-			if(this.playerDictJSON.get(this.killerUUID) != null && this.playerDictJSON.get(killedUUID) != null){
+			if((this.playerDictJSON.get(this.killerUUID) != null && this.playerDictJSON.get(killedUUID) != null) && this.killer != null){
 				this.playerDictJSON.replace(killedUUID, (int)this.killed.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - 2);
 				this.playerDictJSON.replace(killerUUID, (int)this.killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + 2);
 				updateKillerHealth(this.killer);
 			}
-			if(this.playerDictJSON.get(this.killedUUID) == null) {
+			if(this.playerDictJSON.get(this.killedUUID) == null && this.killer != null) {
 				this.console.sendMessage("Added Player " + this.killedUUID + " to the Player Dictionary.");
 				this.playerDictJSON.put(this.killedUUID, (int)this.killed.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - 2);
 			}
-			if(this.playerDictJSON.get(this.killerUUID) == null) {
+			if(this.playerDictJSON.get(this.killerUUID) == null && this.killer != null) {
 				this.console.sendMessage("Added Player " + this.killerUUID + " to the Player Dictionary.");
 				this.playerDictJSON.put(this.killerUUID, (int)this.killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + 2);
 				//Updates the killers health since the killed will update on respawn.
