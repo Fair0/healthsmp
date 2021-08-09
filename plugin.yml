@@ -1,7 +1,7 @@
 name: Life-Steal-Plugin
 main: alphanrrrd.lifesteal.spigot.lifeStealPlugin
 api-version: 1.17
-version: 1.0.2
+version: 1.0.3
 commands:
     revive-player:
         description: Revives a dead player and returns them to 10 hearts.
