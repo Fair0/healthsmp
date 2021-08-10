@@ -96,6 +96,7 @@ public class deathListener implements Listener {
 	public void updateKillerHealth(Player killer) {
 		/*Updates the killers health from their current max health.*/
 		killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + 2);
+		this.console.sendMessage(killer.getDisplayName() + " now has " + killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + " health.");
 	}
 	
 	public void updateJSONFile() {
