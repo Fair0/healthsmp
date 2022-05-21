@@ -1,0 +1,14 @@
+main: com.alphanrrrd.life_steal_plugin.Main
+name: Life-Steal-Plugin
+api-version: 1.18
+version: 1.0.4
+#commands:
+#    revive-player:
+#        description: Revives a dead player and returns them to 10 hearts.
+#        permission: lifesteal.revivePerms
+#    eliminate-player:
+#        description: Eliminates a player and puts them in spectator mode with 0 hearts.
+#        permission: lifesteal.eliminatePerms
+#    reset-plugin:
+#        description: Resets all player values in the plugin so that when they respawn they have 10 hearts (Warning Kills all players so that they have reset health on spawn)
+#        permission: lifesteal.resetPlugin
