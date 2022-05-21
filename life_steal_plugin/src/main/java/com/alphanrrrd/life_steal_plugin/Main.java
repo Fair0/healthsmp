@@ -4,7 +4,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
-        getLogger().info("Hello, SpigotMC!");
+        
+        getLogger().info("Starting Life-Steal-Plugin");
     }
     @Override
     public void onDisable() {
