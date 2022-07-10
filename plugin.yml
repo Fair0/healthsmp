@@ -1,4 +1,4 @@
-name: Life-Steal-Plugin
+name: HealthSmp
 main: alphanrrrd.lifesteal.spigot.lifeStealPlugin
 api-version: 1.17
 version: 1.0.4
